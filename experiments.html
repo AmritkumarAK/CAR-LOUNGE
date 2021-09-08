@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  #captchaBackground {
+   height: 220px;
+   width: 250px;
+   background-color: #2d3748;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+  }
+  #captchaHeading {
+   color: white;
+  }
+  #captcha {
+   height: 80%;
+   width: 80%;
+   font-size: 30px;
+   letter-spacing: 3px;
+   margin: auto;
+   display: block;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+  }
+  .center {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+  }
+  #submitButton {
+   margin-top: 2em;
+   margin-bottom: 2em;
+   background-color: #08e5ff;
+   border: 0px;
+   font-weight: bold;
+  }
+  #refreshButton {
+   background-color: #08e5ff;
+   border: 0px;
+   font-weight: bold;
+  }
+  #textBox {
+   height: 25px;
+  }
+  .incorrectCaptcha {
+   color: #FF0000;
+  }
+  .correctCaptcha {
+   color: #7FFF00;
+}
+  </style>
+</head>
+<body>
+
+ <div class="g-recaptcha brochure__form__captcha" data-sitekey="YOUR SITE KEY"></div>
+   <span id="output"></span></div>
+
+ <script>
+
+ $recaptcha = $_POST['g-recaptcha-response'];
+ $res = reCaptcha($recaptcha);
+ if(!$res['success']){
+   // Error
+ }
+ Using the following function:
+
+
+ function reCaptcha($recaptcha){
+   $secret = "YOUR SECRET KEY";
+   $ip = $_SERVER['REMOTE_ADDR'];
+
+   $postvars = array("secret"=>$secret, "response"=>$recaptcha, "remoteip"=>$ip);
+   $url = "https://www.google.com/recaptcha/api/siteverify";
+   $ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $url);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
+   $data = curl_exec($ch);
+   curl_close($ch);
+
+   return json_decode($data, true);}
+ </script>
+</body>
+</html>
